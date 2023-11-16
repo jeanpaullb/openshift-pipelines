@@ -1,0 +1,32 @@
+apiVersion: tekton.dev/v1beta1
+kind: ClusterTask
+metadata:
+  name: redhat-static-code-sonar
+spec:
+  workspaces:
+    - name: source-code
+    - name: sonar-secret
+    - name: maven-settings
+    - name: maven-local-repo
+  params:
+    - name: MAVEN_IMAGE
+      type: string
+    - name: CONTEXT_PATH
+      type: string
+    - name: SONAR_URL
+      type: string
+    - name: PROJECT_KEY
+      type: string
+  steps:
+    - name: test
+      image: maven:3.8.1-jdk-11
+      script: |
+        #!/bin/sh
+        SONAR_LOGIN=$(cat $(workspaces.sonar-secret.path)/token)
+        cd $(workspaces.source-code.path)/$(params.CONTEXT_PATH)
+        mvn sonar:sonar -s $(workspaces.maven-settings.path)/settings.xml \
+          -Dsonar.host.url=$(params.SONAR_URL) \
+          -Dsonar.projectKey=$(params.PROJECT_KEY) \
+          -Dsonar.login=$SONAR_LOGIN \
+          -DskipTests=true \
+          "-Dmaven.repo.local=$(workspaces.maven-local-repo.path)/.m2"
