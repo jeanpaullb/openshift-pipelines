@@ -52,8 +52,3 @@ spec:
         argocd app sync $(params.application-name)-$(params.environment) $(params.flags)
 
         echo 'argocd app sync $(params.application-name)-$(params.environment) $(params.flags)'
-    - image: 'quay.io/argoproj/argocd:v2.2.8'
-      name: job-wait
-      resources: {}
-      script: >
-        argocd app wait $(params.application-name)-$(params.environment) --resource :Job:job-jmeter --health
