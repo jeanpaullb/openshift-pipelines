@@ -73,7 +73,6 @@ spec:
         registry.redhat.io/ocp-tools-4-tech-preview/source-to-image-rhel8@sha256:ba51e5e74ff5a29fd429b0bb77bc2130e5284826a60d042fc4e4374381a7a308
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
       name: gen-env-file
 
       resources: {}
@@ -97,7 +96,6 @@ spec:
         registry.redhat.io/ocp-tools-4-tech-preview/source-to-image-rhel8@sha256:ba51e5e74ff5a29fd429b0bb77bc2130e5284826a60d042fc4e4374381a7a308
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
       name: generate
       resources: {}
       volumeMounts:
@@ -120,7 +118,6 @@ spec:
       image: $(params.BUILDER_IMAGE)
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
       name: build
       resources: {}
       volumeMounts:
@@ -140,7 +137,6 @@ spec:
       image: $(params.BUILDER_IMAGE)
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
       name: push
       resources: {}
       volumeMounts:
@@ -155,7 +151,6 @@ spec:
         /tekton/results/IMAGE_DIGEST
       securityContext:
         runAsUser: 1000
-        fsGroup: 1000
   volumes:
     - emptyDir: {}
       name: varlibcontainers
