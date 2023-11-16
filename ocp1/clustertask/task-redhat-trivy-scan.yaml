@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: ClusterTask
+metadata:
+  name: trivy-scan
+spec:
+  params:
+  - name: image
+    description: The name of the image to scan
+    type: string
+  - name: project
+    type: string
+  workspaces:
+  - name: trivy-db-cache
+    description: A workspace for trivy cache storage
+
+  steps:
+  - name: scan-image
+    image: image-registry.openshift-image-registry.svc:5000/$(params.project)/trivy:latest
+    command:
+    - trivy
+    - image
+    - "--cache-dir"
+    - "$(workspaces.trivy-db-cache.path)"
+    - $(params.image)
